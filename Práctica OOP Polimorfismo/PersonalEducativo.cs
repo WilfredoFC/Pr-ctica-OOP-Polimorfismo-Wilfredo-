@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+//Wilfredo Valentin Feliz Caba 2024-0158
 namespace Práctica_OOP_Polimorfismo
 {
 
@@ -15,78 +15,152 @@ namespace Práctica_OOP_Polimorfismo
     //y los docentes de contrato fijo, tomando en cuenta que si empleado o docente alcanzo la meta entonces se
     //le paga un salario en caso contrario se le paga la mitad.
 
-    public class PersonalEducativo
+    public abstract class Empleado
     {
-        int id;
-        string nombres;
-        string apellidos;
-        
+        private int id;
+        private string nombres;
+        private string apellidos;
+        protected decimal sueldoBruto;
 
-        public PersonalEducativo(int id, string nombres, string apellidos)
+        public Empleado(int id, string nombres, string apellidos)
         {
             this.id = id;
             this.nombres = nombres;
             this.apellidos = apellidos;
-            
+
         }
-        public int CalcularSueldo()
+
+        public abstract decimal calcular();
+
+        public int Id
         {
-            
+            get { return id; }
         }
+        public string Nombres
+        {
+            get { return nombres; }
+        }
+        public string Apellidos
+        {
+            get { return apellidos; }
+        }
+        public decimal SueldoBruto
+        {
+            get { return sueldoBruto; }
+            protected set { sueldoBruto = (value < 0) ? 0 : value; }
+        }
+
 
     }
 
-    public class DocentePorHora : PersonalEducativo
+
+    public class EmpleadoFijo : Empleado
     {
-        int tarifa;
-        int horasTrabajadas;
-        int sueldo;
-        
-        public DocentePorHora(int id, string nombres, string apellidos, int tarifa ) : base(id, nombres, apellidos)
+        private decimal sueldoFijo;
+        private decimal bono;
+        private bool meta;
+
+        public EmpleadoFijo(int id, string nombres, string apellidos, decimal sueldoFijo) : base(id, nombres, apellidos)
         {
-            this.tarifa = tarifa;
+            SueldoFijo = sueldoFijo;
+
         }
 
-        public override int CalcularSueldo(int horasTrabajadas)
+        public decimal Bono
         {
-            sueldo = tarifa * horasTrabajadas;
-            return sueldo;
+            get { return bono; }
+            set { bono = (value < 0) ? 0 : value; }
         }
-        
-    
+        public bool Meta
+        {
+            get { return meta; }
+            set { meta = value; }
+        }
 
+        public decimal SueldoFijo
+        {
+            get { return sueldoFijo; }
+            protected set { sueldoFijo = (value < 0) ? 0 : value; }
+        }
+
+        public override decimal calcular()
+        {
+            if (meta)
+            {
+                SueldoBruto = sueldoFijo + bono;
+                return sueldoBruto;
+            }
+            else
+            {
+                SueldoBruto = sueldoFijo / 2;
+                return sueldoBruto;
+            }
+
+        }
     }
 
-    public class DocenteContratoFijo : PersonalEducativo
+    public class DocenteContratoFijo : EmpleadoFijo
     {
-        int sueldoFijo;
-        int sueldoFinal;
-        public DocenteContratoFijo(int id, string nombres, string apellidos ) : base(id, nombres, apellidos)
+        private decimal mesesContrato;
+
+        public DocenteContratoFijo(int id, string nombres, string apellidos, decimal sueldoFijo, decimal mesesContrato) : base(id, nombres, apellidos, sueldoFijo)
         {
+            MesesContrato = mesesContrato;
         }
 
-        public override int CalcularSueldo()
+        public decimal MesesContrato
         {
-            return CalcularSueldo();
-        }
-
-        public int otorgarBono(int bonificacion)
-        {
-            
+            get { return mesesContrato; }
+            protected set { mesesContrato = (value < 0) ? 0 : value; }
         }
     }
-
-    public class EmpleadosAdministrativos : PersonalEducativo
+    public class EmpleadoAdministrativo : EmpleadoFijo
     {
-        public EmpleadosAdministrativos(int id, string nombres, string apellidos ) : base(id, nombres, apellidos)
+        private string puesto;
+
+        public EmpleadoAdministrativo(int id, string nombres, string apellidos, decimal sueldoFijo, string puesto) : base(id, nombres, apellidos, sueldoFijo)
         {
+            Puesto = puesto;
         }
 
-        public override int CalcularSueldo()
+        public string Puesto
         {
-            return CalcularSueldo();
+            get { return puesto; }
+            set { puesto = value; }
+        }
+
+    }
+
+
+    public class DocentePorHora : Empleado
+    {
+        private const decimal tarifa = 800;
+        private decimal horasTrabajadas;
+
+        public DocentePorHora(int id, string nombres, string apellidos, decimal horasTrabajadas) : base(id, nombres, apellidos)
+        {
+            Horas = horasTrabajadas;
+        }
+
+        public decimal Horas
+        {
+            get { return horasTrabajadas; }
+            set
+            {
+                horasTrabajadas = (value < 0) ? 0 : value;
+            }
+        }
+
+        public override decimal calcular()
+        {
+            SueldoBruto = tarifa * horasTrabajadas;
+            return sueldoBruto;
         }
     }
+
+
+
 
 
 }
+
