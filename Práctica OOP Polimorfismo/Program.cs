@@ -1,5 +1,6 @@
-﻿using System.Diagnostics.Contracts;
-
+using Práctica_OOP_Polimorfismo;
+using System.Diagnostics.Contracts;
+//Wilfredo Valentin Feliz Caba 2024-0158
 namespace OOP_Polifmorfismo
 {
 
@@ -15,12 +16,25 @@ namespace OOP_Polifmorfismo
         static void Main(string[] args)
         {
             
+            Empleado docentePorHora = new DocentePorHora(1, "Wilfredo", "Feliz", 70);
+            EmpleadoFijo docenteContratoFijo = new DocenteContratoFijo(2, "Mariana", "Martinez", 20000, 20);
+
+            docenteContratoFijo.Bono = 5500;
+            docenteContratoFijo.Meta = true;
+
+            EmpleadoFijo empleadoAdministrativo = new EmpleadoAdministrativo(3, "Carlos", "Caraballo", 75000, "Director");
+
+            empleadoAdministrativo.Bono = 3700;
+            empleadoAdministrativo.Meta = false;
+
+            
+            Console.WriteLine($"Salario de {docentePorHora.Nombres} {docentePorHora.Apellidos}: {docentePorHora.calcular():C}");
+            Console.WriteLine($"Salario de {docenteContratoFijo.Nombres} {docenteContratoFijo.Apellidos}: {docenteContratoFijo.calcular():C}");
+            Console.WriteLine($"Salario de {empleadoAdministrativo.Nombres} {empleadoAdministrativo.Apellidos}: {empleadoAdministrativo.calcular():C}");
+
+            
+
         }
     }
-    
-    
-
-   
-
 
 }
